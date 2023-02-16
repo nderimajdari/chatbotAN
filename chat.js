@@ -38,40 +38,60 @@ let time = getTime();
 $("#chat-timestamp").append(time);
 document.getElementById("userInput").scrollIntoView(false);
 
+let questionQueue = [];
+let isAnsweringQuestion = false;
+
 function getHardResponse(userText) {
-    let botResponse = getBotResponse(userText);
-    let botHtml = '<p class="botText"><span>|</span></p>';
-  
-    // append bot's response after the last user message
-    $(".userText:last").after(botHtml);
-  
-    let i = 0;
-    let intervalId = setInterval(function () {
-      if (i % 2 == 0) {
-        $(".botText:last span").text(botResponse.slice(0, i) + "_");
-      } else {
-        $(".botText:last span").text(botResponse.slice(0, i));
-      }
-      i++;
-  
-      if (i > botResponse.length) {
-        clearInterval(intervalId);
-  
-        // fade out cursor after 2 seconds
-        setTimeout(function() {
-          $(".botText:last span:not(:last-child)").fadeOut("slow");
-        }, 2000);
-  
-        let botHtml = '<p class="botText"><span>' + botResponse + "</span></p>";
-        $(".botText:last").replaceWith(botHtml);
-      }
-    }, 150);
-  
-    setInterval(function () {
-      document.getElementById("chat-bar-bottom").scrollIntoView(true);
-    }, 10);
+  let botResponse = getBotResponse(userText);
+  let botHtml = '<p class="botText"><span>|</span></p>';
+
+  // append bot's response after the last user message
+  $(".userText:last").after(botHtml);
+
+  let i = 0;
+  let intervalId = setInterval(function () {
+    if (i % 2 == 0) {
+      $(".botText:last span").text(botResponse.slice(0, i) + "_");
+    } else {
+      $(".botText:last span").text(botResponse.slice(0, i));
+    }
+    i++;
+
+    if (i > botResponse.length) {
+      clearInterval(intervalId);
+
+      // fade out cursor after 2 seconds
+      setTimeout(function() {
+        $(".botText:last span:not(:last-child)").fadeOut("slow");
+      }, 2000);
+
+      let botHtml = '<p class="botText"><span>' + botResponse + "</span></p>";
+      $(".botText:last").replaceWith(botHtml);
+      
+      isAnsweringQuestion = false;
+      processQuestionQueue();
+    }
+  }, 150);
+
+  setInterval(function () {
+    document.getElementById("chat-bar-bottom").scrollIntoView(true);
+  }, 10);
+}
+
+function queueQuestion(userText) {
+  questionQueue.push(userText);
+  processQuestionQueue();
+}
+
+function processQuestionQueue() {
+  if (questionQueue.length > 0 && !isAnsweringQuestion) {
+    isAnsweringQuestion = true;
+    let question = questionQueue.shift();
+    setTimeout(() => {
+      getHardResponse(question);
+    }, 1000);
   }
-  
+}
 
 function getResponse() {
   let userText = $("#textInput").val();
@@ -87,10 +107,8 @@ function getResponse() {
   $("#textInput").val("");
   $("#chatbox").append(userHtml);
   document.getElementById("chat-bar-bottom").scrollIntoView(true);
-
-  setTimeout(() => {
-    getHardResponse(userText);
-  }, 1000);
+  
+  queueQuestion(userText);
 }
 
 function buttonSendText(sampleText) {
