@@ -65,7 +65,7 @@ function getHardResponse(userText) {
         let botHtml = '<p class="botText"><span>' + botResponse + "</span></p>";
         $(".botText:last").replaceWith(botHtml);
       }
-    }, 200);
+    }, 150);
   
     setInterval(function () {
       document.getElementById("chat-bar-bottom").scrollIntoView(true);
