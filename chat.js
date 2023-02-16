@@ -31,7 +31,7 @@ function getTime() {
   return time;
 }
 
-let firstMessage = "Hello, I'm chatbot AN! How can I help you today?"
+let firstMessage = "Hello, I'm chatbot AN! How can I help you today?";
 document.getElementById("botStarterMessage").innerHTML = '<p class="botText"><span>' + firstMessage + '</span></p>';
 
 let time = getTime();
@@ -40,22 +40,32 @@ document.getElementById("userInput").scrollIntoView(false);
 
 function getHardResponse(userText) {
     let botResponse = getBotResponse(userText);
-    let botHtml = '<p class="botText"><span></span></p>';
+    let botHtml = '<p class="botText"><span>|</span></p>';
   
     // append bot's response after the last user message
     $(".userText:last").after(botHtml);
   
     let i = 0;
     let intervalId = setInterval(function () {
-      if (i <= botResponse.length) {
-        $(".botText:last span").text(botResponse.slice(0, i));
-        i++;
+      if (i % 2 == 0) {
+        $(".botText:last span").text(botResponse.slice(0, i) + "_");
       } else {
+        $(".botText:last span").text(botResponse.slice(0, i));
+      }
+      i++;
+  
+      if (i > botResponse.length) {
         clearInterval(intervalId);
-        let botHtml = '<p class="botText"><span>' + botResponse + '</span></p>';
+  
+        // fade out cursor after 2 seconds
+        setTimeout(function() {
+          $(".botText:last span:not(:last-child)").fadeOut("slow");
+        }, 2000);
+  
+        let botHtml = '<p class="botText"><span>' + botResponse + "</span></p>";
         $(".botText:last").replaceWith(botHtml);
       }
-    }, 100);
+    }, 200);
   
     setInterval(function () {
       document.getElementById("chat-bar-bottom").scrollIntoView(true);
@@ -72,7 +82,7 @@ function getResponse() {
     // Run the rest of the code
   }
 
-  let userHtml = '<p class="userText"><span>' + userText + '</span></p>';
+  let userHtml = '<p class="userText"><span>' + userText + "</span></p>";
 
   $("#textInput").val("");
   $("#chatbox").append(userHtml);
@@ -84,7 +94,7 @@ function getResponse() {
 }
 
 function buttonSendText(sampleText) {
-  let userHtml = '<p class="userText"><span>' + sampleText + '</span></p>';
+  let userHtml = '<p class="userText"><span>' + sampleText + "</span></p>";
 
   $("#textInput").val("");
   $("#chatbox").append(userHtml);
@@ -100,5 +110,3 @@ $("#textInput").keypress(function (e) {
     getResponse();
   }
 });
-
-
