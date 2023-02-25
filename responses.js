@@ -26,25 +26,28 @@ const preTrainedAnswers = {
     "default":"I'm sorry, My training data does not include the information you're asking for. Could you please try asking a different question?"
 };
 
+
 function getBotResponse(input) {
+
   if (input.startsWith("my name is ")) {
-    userName = input.replace("my name is ", "");
-    return "Nice to meet you  " + userName + "! how can I help you today?";
+    const name = input.replace("my name is ", "");
+    const responses = [
+      `Nice to meet you ${name}! how can I help you today?`,
+      `Hey ${name}! how can I help you today?`,
+      `Hello ${name}! how can I help you today?`
+    ];
+    return responses[Math.floor(Math.random() * responses.length)];
   }
 
   if (input.startsWith("emri im eshte ")) {
-    userEmri = input.replace("emri im eshte ", "");
-    return "Gezohem  " + userEmri + "! si mund te ju ndihmoj?";
-  }
-
-  if (input.startsWith("I'm ")) {
-    userName = input.replace("I'm ", "");
-    return "Nice to meet you  " + userName + "! how can I help you today?";
-  }
-
-  if (input.startsWith("une jam ")) {
-    userEmri = input.replace("une jam ", "");
-    return "Gezohem  " + userEmri + "! si mund te ju ndihmoj?";
+    const emri = input.replace("emri im eshte ", "");
+    const responses = [
+      `Gëzohem që ju njoha ${emri}! si mund të ju ndihmojë?`,
+      `Përshëndetje ${emri}! çfarë mund të bëj për ju?`,
+      `Tung ${emri}! a mund të bëj ndonjë gjë për ju?`,
+      `çkemi ${emri}! çfarë duhet të bëj për ju?`
+    ];
+    return responses[Math.floor(Math.random() * responses.length)];
   }
 
   let response = preTrainedAnswers[input];
@@ -56,11 +59,11 @@ function getBotResponse(input) {
   }
 
   if (userName) {
-    response = response.replace("Hello ", "Hello " + userName + ", ");
+    response = response.replace("Hello ", `Nice to meet you ${userName}! Hello `);
   }
 
   if (userEmri) {
-    response = response.replace("Hello ", "Hello " + userEmri + ", ");
+    response = response.replace("Hello ", `Gëzohem që ju njoha ${userEmri}! Hello `);
   }
   return response;
 }
