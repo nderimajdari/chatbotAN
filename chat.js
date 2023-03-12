@@ -43,6 +43,7 @@ document.getElementById("userInput").scrollIntoView(false);
 let questionQueue = [];
 let isAnsweringQuestion = false;
 let intervalId = null;
+let scrollIntervalId = null;
 
 function getHardResponse(userText) {
   let botResponse = getBotResponse(userText);
@@ -73,10 +74,11 @@ function getHardResponse(userText) {
       
       isAnsweringQuestion = false;
       processQuestionQueue();
+      clearInterval(scrollIntervalId); // clear the scrolling interval
     }
   }, 150);
 
-  setInterval(function () {
+  scrollIntervalId = setInterval(function () {
     document.getElementById("chat-bar-bottom").scrollIntoView(true);
   }, 10);
 }
@@ -91,6 +93,7 @@ async function processQuestionQueue() {
     isAnsweringQuestion = true;
     const question = questionQueue.pop();
     clearInterval(intervalId);
+    clearInterval(scrollIntervalId); // clear the scrolling interval
     await getHardResponse(question);
     await processQuestionQueue();
     isAnsweringQuestion = false;
