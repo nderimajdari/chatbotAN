@@ -100,7 +100,7 @@ async function processQuestionQueue() {
 function getResponse() {
   let userText = $("#textInput").val();
 
-  if (userText == "") {
+  if (userText.trim() == "") {
     return;
   } else {
     // Run the rest of the code
@@ -111,9 +111,10 @@ function getResponse() {
   $("#textInput").val("");
   $("#chatbox").append(userHtml);
   document.getElementById("chat-bar-bottom").scrollIntoView(true);
-  
+
   queueQuestion(userText);
 }
+
 
 function buttonSendText(sampleText) {
   let userHtml = '<p class="userText"><span>' + sampleText + "</span></p>";
