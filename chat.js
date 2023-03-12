@@ -31,6 +31,15 @@ function getTime() {
   return time;
 }
 
+
+let firstMessage = "Hello, I'm chatbot AN! How can I help you today?";
+document.getElementById("botStarterMessage").innerHTML = '<p class="botText"><span>' + firstMessage + '</span></p>';
+
+let time = getTime();
+$("#chat-timestamp").append(time);
+document.getElementById("userInput").scrollIntoView(false);
+
+
 let questionQueue = [];
 let isAnsweringQuestion = false;
 let intervalId = null;
