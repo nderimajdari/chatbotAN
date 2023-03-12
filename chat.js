@@ -31,15 +31,9 @@ function getTime() {
   return time;
 }
 
-let firstMessage = "Hello, I'm chatbot AN! How can I help you today?";
-document.getElementById("botStarterMessage").innerHTML = '<p class="botText"><span>' + firstMessage + '</span></p>';
-
-let time = getTime();
-$("#chat-timestamp").append(time);
-document.getElementById("userInput").scrollIntoView(false);
-
 let questionQueue = [];
 let isAnsweringQuestion = false;
+let intervalId = null;
 
 function getHardResponse(userText) {
   let botResponse = getBotResponse(userText);
@@ -49,7 +43,7 @@ function getHardResponse(userText) {
   $(".userText:last").after(botHtml);
 
   let i = 0;
-  let intervalId = setInterval(function () {
+  intervalId = setInterval(function () {
     if (i % 2 == 0) {
       $(".botText:last span").text(botResponse.slice(0, i) + "_");
     } else {
@@ -78,18 +72,19 @@ function getHardResponse(userText) {
   }, 10);
 }
 
-function queueQuestion(userText) {
+async function queueQuestion(userText) {
   questionQueue.push(userText);
-  processQuestionQueue();
+  await processQuestionQueue();
 }
 
-function processQuestionQueue() {
+async function processQuestionQueue() {
   if (questionQueue.length > 0 && !isAnsweringQuestion) {
     isAnsweringQuestion = true;
-    let question = questionQueue.shift();
-    setTimeout(() => {
-      getHardResponse(question);
-    }, 1000);
+    const question = questionQueue.pop();
+    clearInterval(intervalId);
+    await getHardResponse(question);
+    await processQuestionQueue();
+    isAnsweringQuestion = false;
   }
 }
 
