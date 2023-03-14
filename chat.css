@@ -157,12 +157,11 @@
     border-bottom-right-radius: 45px;
     max-width: 80%;
     margin-left: 10px;
-    animation: floatup .5s forwards;
     margin-bottom: 10px;
 
-
-
 }
+
+
 
 
 
@@ -363,18 +362,3 @@ form .textarea textarea:focus::placeholder{
 .chat-box form .field button:active{
   transform: scale(0.97);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
