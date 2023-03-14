@@ -15,22 +15,16 @@ for (let i = 0; i < coll.length; i++) {
 }
 
 function getTime() {
-  let today = new Date();
-  hours = today.getHours();
-  minutes = today.getMinutes();
+  const today = new Date();
+  let hours = today.getHours();
+  let minutes = today.getMinutes();
 
-  if (hours < 10) {
-    hours = "0" + hours;
-  }
+  hours = hours < 10 ? "0" + hours : hours;
+  minutes = minutes < 10 ? "0" + minutes : minutes;
 
-  if (minutes < 10) {
-    minutes = "0" + minutes;
-  }
-
-  let time = hours + ":" + minutes;
+  const time = hours + ":" + minutes;
   return time;
 }
-
 
 let firstMessage = "Hello, I'm chatbot AN! How can I help you today?";
 document.getElementById("botStarterMessage").innerHTML = '<p class="botText"><span>' + firstMessage + '</span></p>';
@@ -38,7 +32,6 @@ document.getElementById("botStarterMessage").innerHTML = '<p class="botText"><sp
 let time = getTime();
 $("#chat-timestamp").append(time);
 document.getElementById("userInput").scrollIntoView(false);
-
 
 let questionQueue = [];
 let isAnsweringQuestion = false;
@@ -106,7 +99,6 @@ function getResponse() {
   if (userText.trim() == "") {
     return;
   } else {
-    // Run the rest of the code
   }
 
   let userHtml = '<p class="userText"><span>' + userText + "</span></p>";
@@ -117,7 +109,6 @@ function getResponse() {
 
   queueQuestion(userText);
 }
-
 
 function buttonSendText(sampleText) {
   let userHtml = '<p class="userText"><span>' + sampleText + "</span></p>";
