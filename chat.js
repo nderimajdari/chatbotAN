@@ -12,7 +12,7 @@ const addCollapsibleEventListeners = () => {
 
 const getTime = () => {
   const today = new Date();
-  const time = today.toLocaleTimeString();
+  const time = today.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
   return time;
 };
 
