@@ -28,12 +28,7 @@ let isAnsweringQuestion = false;
 let intervalId = null;
 let scrollIntervalId = null;
 
-const getHardResponse = (userText) => {
-  let botResponse = getBotResponse(userText);
-  let botHtml = `<p class="botText"><span>|</span></p>`;
-
-  $(".userText:last").after(botHtml);
-
+const displayTypingAnimation = (botResponse) => {
   let i = 0;
   intervalId = setInterval(() => {
     $(".botText:last span").text(`${botResponse.slice(0, i)}${i % 2 === 0 ? "_" : ""}`);
@@ -46,14 +41,29 @@ const getHardResponse = (userText) => {
         $(".botText:last span:not(:last-child)").fadeOut("slow");
       }, 2000);
 
-      let botHtml = `<p class="botText"><span>${botResponse}</span></p>`;
-      $(".botText:last").replaceWith(botHtml);
-
-      isAnsweringQuestion = false;
-      processQuestionQueue();
+      displayBotResponse(botResponse);
+      clearQuestionQueue();
       clearInterval(scrollIntervalId);
     }
   }, 150);
+};
+
+const displayBotResponse = (botResponse) => {
+  let botHtml = `<p class="botText"><span>${botResponse}</span></p>`;
+  $(".botText:last").replaceWith(botHtml);
+};
+
+const clearQuestionQueue = () => {
+  isAnsweringQuestion = false;
+  processQuestionQueue();
+};
+
+const getHardResponse = (userText) => {
+  let botResponse = getBotResponse(userText);
+  let botHtml = `<p class="botText"><span>|</span></p>`;
+
+  $(".userText:last").after(botHtml);
+  displayTypingAnimation(botResponse);
 
   scrollIntervalId = setInterval(() => {
     document.getElementById("chat-bar-bottom").scrollIntoView(true);
