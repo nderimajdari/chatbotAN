@@ -28,7 +28,8 @@ const preTrainedAnswers = {
 
 
 function getBotResponse(input) {
-
+  input = input.toUpperCase();
+  input = input.toLowerCase();
   if (input.startsWith("my name is ")) {
     const name = input.replace("my name is ", "");
     const responses = [
