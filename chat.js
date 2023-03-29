@@ -75,12 +75,18 @@ const displayTypingAnimation = (botResponse) => {
       $(".botText:last span").text(`${wrongSentence}${cursor}`);
       wrongWord = true;
       setTimeout(() => {
-        $(".botText:last span").text(`${correctedSentence}${currentWord === words.length - 1 ? "" : " "}${cursor}`);
-        wrongWord = false;
+        if (Math.random() < 0.5) {
+          $(".botText:last span").text(`${correctedSentence}${currentWord === words.length - 1 ? "" : " "}${cursor}`);
+          wrongWord = false;
+        } else {
+          $(".botText:last span").text(`${correctedSentence} ${cursor}`);
+          currentLetter = correctedSentence.length + 1;
+        }
       }, 100);
     }
   }, 150);
 }
+
 
 const displayBotResponse = (botResponse) => {
   let botHtml = `<p class="botText"><span>${botResponse}</span></p>`;
