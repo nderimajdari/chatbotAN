@@ -29,12 +29,28 @@ let intervalId = null;
 let scrollIntervalId = null;
 
 const displayTypingAnimation = (botResponse) => {
-  let i = 0;
-  intervalId = setInterval(() => {
-    $(".botText:last span").text(`${botResponse.slice(0, i)}${i % 2 === 0 ? "_" : ""}`);
-    i++;
+  let words = botResponse.split(" ");
+  let currentWord = 0;
+  let currentLetter = 0;
+  let wrongWord = false;
 
-    if (i > botResponse.length) {
+  intervalId = setInterval(() => {
+    if (currentLetter <= words[currentWord].length) {
+      let sentence = words.slice(0, currentWord + 1).join(" ");
+      let cursor = currentLetter % 2 === 0 ? "_" : "";
+      if (wrongWord) {
+        $(".botText:last span").text(`${sentence}${cursor}`);
+      } else {
+        $(".botText:last span").text(`${sentence}${currentWord === words.length - 1 ? "" : " "}${cursor}`);
+      }
+      currentLetter++;
+    } else {
+      currentWord++;
+      currentLetter = 0;
+      wrongWord = false;
+    }
+
+    if (currentWord === words.length) {
       clearInterval(intervalId);
 
       setTimeout(() => {
@@ -45,8 +61,26 @@ const displayTypingAnimation = (botResponse) => {
       clearQuestionQueue();
       clearInterval(scrollIntervalId);
     }
+
+    // Generate some wrong words
+    if (currentLetter === Math.floor(words[currentWord].length / 2) && !wrongWord) {
+      let wrongLength = Math.floor(Math.random() * (words[currentWord].length - currentLetter)) + 1;
+      let wrong = "";
+      for (let i = 0; i < wrongLength; i++) {
+        wrong += String.fromCharCode(Math.floor(Math.random() * 26) + 97); // Generate random lowercase letter
+      }
+      let correctedSentence = words.slice(0, currentWord).join(" ");
+      let wrongSentence = `${correctedSentence} ${wrong}`;
+      let cursor = currentLetter % 2 === 0 ? "_" : "";
+      $(".botText:last span").text(`${wrongSentence}${cursor}`);
+      wrongWord = true;
+      setTimeout(() => {
+        $(".botText:last span").text(`${correctedSentence}${currentWord === words.length - 1 ? "" : " "}${cursor}`);
+        wrongWord = false;
+      }, 100);
+    }
   }, 150);
-};
+}
 
 const displayBotResponse = (botResponse) => {
   let botHtml = `<p class="botText"><span>${botResponse}</span></p>`;
