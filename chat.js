@@ -28,17 +28,18 @@ let isAnsweringQuestion = false;
 let intervalId = null;
 let scrollIntervalId = null;
 
-const displayTypingAnimation = (botResponse) => {
+const displayTypingAnimation = (botResponse, backspaceProb = 0.3) => {
   let words = botResponse.split(" ");
   let currentWord = 0;
   let currentLetter = 0;
   let wrongWord = false;
+  let wrongCount = 0;
 
   intervalId = setInterval(() => {
     if (currentLetter <= words[currentWord].length) {
       let sentence = words.slice(0, currentWord + 1).join(" ");
       let cursor = currentLetter % 2 === 0 ? "_" : "";
-      if (wrongWord) {
+      if (wrongWord && currentLetter !== 0) {
         $(".botText:last span").text(`${sentence}${cursor}`);
       } else {
         $(".botText:last span").text(`${sentence}${currentWord === words.length - 1 ? "" : " "}${cursor}`);
@@ -48,6 +49,7 @@ const displayTypingAnimation = (botResponse) => {
       currentWord++;
       currentLetter = 0;
       wrongWord = false;
+      wrongCount = 0;
     }
 
     if (currentWord === words.length) {
@@ -63,7 +65,12 @@ const displayTypingAnimation = (botResponse) => {
     }
 
     // Generate some wrong words
-    if (currentLetter === Math.floor(words[currentWord].length / 2) && !wrongWord) {
+    if (
+      currentLetter === Math.floor(words[currentWord].length / 2) &&
+      !wrongWord &&
+      wrongCount < 2 &&
+      Math.random() < backspaceProb
+    ) {
       let wrongLength = Math.floor(Math.random() * (words[currentWord].length - currentLetter)) + 1;
       let wrong = "";
       for (let i = 0; i < wrongLength; i++) {
@@ -74,19 +81,19 @@ const displayTypingAnimation = (botResponse) => {
       let cursor = currentLetter % 2 === 0 ? "_" : "";
       $(".botText:last span").text(`${wrongSentence}${cursor}`);
       wrongWord = true;
+      wrongCount++;
       setTimeout(() => {
         if (Math.random() < 0.5) {
           $(".botText:last span").text(`${correctedSentence}${currentWord === words.length - 1 ? "" : " "}${cursor}`);
           wrongWord = false;
         } else {
-          $(".botText:last span").text(`${correctedSentence} ${cursor}`);
-          currentLetter = correctedSentence.length + 1;
+          $(".botText:last span").text(`${correctedSentence}${cursor}`);
+          currentLetter = correctedSentence.length;
         }
       }, 100);
     }
   }, 150);
 }
-
 
 const displayBotResponse = (botResponse) => {
   let botHtml = `<p class="botText"><span>${botResponse}</span></p>`;
