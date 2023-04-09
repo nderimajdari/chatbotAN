@@ -28,7 +28,7 @@ let isAnsweringQuestion = false;
 let intervalId = null;
 let scrollIntervalId = null;
 
-const displayTypingAnimation = (botResponse, backspaceProb = 0.3) => {
+const displayTypingAnimation = (botResponse, backspaceProb = 0.1) => {
   let words = botResponse.split(" ");
   let currentWord = 0;
   let currentLetter = 0;
