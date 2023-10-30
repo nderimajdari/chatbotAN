@@ -6,7 +6,6 @@ const preTrainedAnswers = {
     "hello ":[" hey, what’s up ", " hi, what’s up ", " hello! There, How can I help you today?"],
     "hey ":["hi ", " Hello! How can I help you today?", " hey "],
     "hi ":[" hello ", " hey ", " hi "],
-    "kam problem me cypress me gjej nje zgjidhje ":[" Duhet ta heq Ylli skripten "],
     
 "What is your name?": ["My name is AN.", "You can call me AN.", "I'm AN."],
 "How are you doing?": ["I'm doing well, thank you.", "I'm functioning normally, thank you.", "I'm fine, thanks."],
